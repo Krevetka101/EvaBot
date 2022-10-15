@@ -37,7 +37,8 @@ def main():
 
     def register_3(message):
         registration.append(message.text)
-        bot.reply_to(message, f'Всё верно?\n{registration[0]}\n{registration[1]}')
+        bot.reply_to(message, f'Всё верно?\n{registration[0]}\n{registration[1]}\n'
+                              f'Напишите: Да, или Нет.')
         bot.register_next_step_handler(message, register_4)
 
     def register_4(message):
