@@ -486,6 +486,13 @@ def main():
             bot.send_message(message.chat.id, 'Спасибо, мне очень приятно :)')
         elif result == 'Ева математика' or result == 'Ева, математика':
             mathem(message)
+        elif result == 'Ева, стата' and message.chat.id == 2078991528:
+            abc = cursor.execute('SELECT * FROM evabase').fetchall()
+            bot.send_message(message.chat.id, 'БД:\n'
+                                              f'{np.array(abc)}')
+            deg = cursor.execute('SELECT * FROM chats_id').fetchall()
+            bot.send_message(message.chat.id, 'События:\n'
+                                              f'{np.array(deg)}')
 
     def delete_event(message):
         try:
