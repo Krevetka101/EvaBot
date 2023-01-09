@@ -1,3 +1,7 @@
+
+#!/usr/bin/env python3
+#-*- coding: utf-8 -*-
+
 import telebot, wikipedia, datetime, sqlite3, requests, random
 import numpy as np
 from bs4 import BeautifulSoup
@@ -174,13 +178,15 @@ for messages in total_results:
         check_days = count_day(res_ev[3])
         result_events += str(res_ev[0]) + ' ' + str(res_ev[1]) + ' ' + str(res_ev[2]) + \
                          ' ' + str(res_ev[3]) + ' | ' + str(check_days) + '\n'
-
-    bot.send_message(messages[0], f'<b>Доброе утро!</b>{result_morning_cartoon}\n'
+    try:
+        bot.send_message(messages[0], f'<b>Доброе утро!</b>{result_morning_cartoon}\n'
                                   f'<b>Сегодня:</b> {today_date}\n'
                                   f'<b>Сегодняшние праздники:</b>🎂\n'
                                   f'{result_holidays}'
-                                  f'\n{temp2.text}\n'
+                                  f'\n{temp2.text}'
                                   f'\n<b>Погода на сегодня:</b>🌅\n{weather_result}', parse_mode='html')
+    except Exception:
+         pass
     bot.send_message(messages[0], f'<b>Гороскоп на сегодня:</b>🌠\n'
                                   f'<b>Овен:</b>♈️\n{oven.text}\n'
                                   f'<b>Телец:</b>♉️\n{telec.text}\n'
@@ -191,7 +197,7 @@ for messages in total_results:
     bot.send_message(messages[0], f'<b>Весы:</b>♎️\n{vesi.text}\n'
                                   f'<b>Скорпион:</b>♏️\n{scorp.text}\n'
                                   f'<b>Стрелец:</b>♐️\n{strel.text}\n'
-                                  f'<b>Козерог:</b>♑️\n{koz.text}\n'
+                                 f'<b>Козерог:</b>♑️\n{koz.text}\n'
                                   f'<b>Водолей:</b>♒️\n{vodol.text}\n'
                                   f'<b>Рыбы:</b>♓️\n{fish.text}\n', parse_mode='html')
     bot.send_message(messages[0], '<b>События в Вашем чате:</b>\n'
