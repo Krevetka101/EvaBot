@@ -1,6 +1,5 @@
-
-#!/usr/bin/env python3
-#-*- coding: utf-8 -*-
+# !/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import telebot, wikipedia, datetime, sqlite3, requests, random
 import numpy as np
@@ -79,24 +78,33 @@ for check in holidays:
                 result_holidays += ' '
         result_holidays += '\n'
 
+
 # Погода
-weather_result = ''
-url_weather = 'https://world-weather.ru/pogoda/russia/moscow/'
-response2 = requests.get(url_weather)
-bs2 = BeautifulSoup(response2.text, 'lxml')
-temp_weather = bs2.find(id="defSet-2")
-finish = str(temp_weather.text)
-count = 0
-for check_words in finish:
-    words = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П',
-             'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
-    if count < 5:
-        if check_words in words:
-            if count < 4:
-                weather_result += '\n' + check_words
-            count += 1
-        else:
-            weather_result += check_words
+def weather(city):
+    fin_city = ''
+    cit = np.array(city)
+    for wwwa in cit:
+        fin_city += wwwa
+    fin_city = str(fin_city).replace('_', '/')
+    weather_result = ''
+    url_weather = f'https://world-weather.ru/pogoda/{fin_city}/'
+    response2 = requests.get(url_weather)
+    bs2 = BeautifulSoup(response2.text, 'lxml')
+    temp_weather = bs2.find(id="defSet-2")
+    finish = str(temp_weather.text)
+    count = 0
+    for check_words in finish:
+        words = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П',
+                 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
+        if count < 5:
+            if check_words in words:
+                if count < 4:
+                    weather_result += '\n' + check_words
+                count += 1
+            else:
+                weather_result += check_words
+    return weather_result
+
 
 # Гороскоп
 # Овен
@@ -178,15 +186,26 @@ for messages in total_results:
         check_days = count_day(res_ev[3])
         result_events += str(res_ev[0]) + ' ' + str(res_ev[1]) + ' ' + str(res_ev[2]) + \
                          ' ' + str(res_ev[3]) + ' | ' + str(check_days) + '\n'
-    try:
+    awggawawg = cursor.execute(f'SELECT city FROM chats_id WHERE chat_id ={messages[0]}').fetchone()
+    check_awg = np.array(awggawawg)
+    hggg = weather(awggawawg)
+    if temp2 is None:
         bot.send_message(messages[0], f'<b>Доброе утро!</b>{result_morning_cartoon}\n'
-                                  f'<b>Сегодня:</b> {today_date}\n'
-                                  f'<b>Сегодняшние праздники:</b>🎂\n'
-                                  f'{result_holidays}'
-                                  f'\n{temp2.text}'
-                                  f'\n<b>Погода на сегодня:</b>🌅\n{weather_result}', parse_mode='html')
+                                      f'<b>Сегодня:</b> {today_date}\n'
+                                      f'<b>Сегодняшние праздники:</b>🎂\n'
+                                      f'{result_holidays}\n')
+    else:
+        bot.send_message(messages[0], f'<b>Доброе утро!</b>{result_morning_cartoon}\n'
+                                      f'<b>Сегодня:</b> {today_date}\n'
+                                      f'<b>Сегодняшние праздники:</b>🎂\n'
+                                      f'{result_holidays}'
+                                      f'\n{temp2.text}\n')
+    try:
+        bot.send_message(messages[0], f'<b>Погода на сегодня в {check_awg}:</b>🌅\n{hggg}\n'
+                                      f'Чтобы изменить страну/город напишите "Сменить город"', parse_mode='html')
     except Exception:
-         pass
+        bot.send_message(messages[0], 'Выбранный Вами город не найден, попробуйте сменить его '
+                                      'написав <b>Сменить город</b>', parse_mode='html')
     bot.send_message(messages[0], f'<b>Гороскоп на сегодня:</b>🌠\n'
                                   f'<b>Овен:</b>♈️\n{oven.text}\n'
                                   f'<b>Телец:</b>♉️\n{telec.text}\n'
@@ -197,11 +216,12 @@ for messages in total_results:
     bot.send_message(messages[0], f'<b>Весы:</b>♎️\n{vesi.text}\n'
                                   f'<b>Скорпион:</b>♏️\n{scorp.text}\n'
                                   f'<b>Стрелец:</b>♐️\n{strel.text}\n'
-                                 f'<b>Козерог:</b>♑️\n{koz.text}\n'
+                                  f'<b>Козерог:</b>♑️\n{koz.text}\n'
                                   f'<b>Водолей:</b>♒️\n{vodol.text}\n'
                                   f'<b>Рыбы:</b>♓️\n{fish.text}\n', parse_mode='html')
-    bot.send_message(messages[0], '<b>События в Вашем чате:</b>\n'
-                                  '<b>ID события:</b>  <b>Кто создал событие:</b>  '
-                                  '<b>Текст события:</b>  <b>Дата события:</b>\n'
-                                  f'{result_events}', parse_mode='html')
+    if result_events is not None:
+        bot.send_message(messages[0], '<b>События в Вашем чате:</b>\n'
+                                      '<b>ID события:</b>  <b>Кто создал событие:</b>  '
+                                      '<b>Текст события:</b>  <b>Дата события:</b>\n'
+                                      f'{result_events}', parse_mode='html')
 total_results.clear()

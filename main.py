@@ -458,10 +458,12 @@ def main():
         elif result == 'Ева, добавь чат' or result == 'Ева добавь чат':
             try:
                 add_chat(chat_id)
-                bot.send_message(message.chat.id, 'Готово! Ваш чат успешно добавлен в список рассылок.\n'
-                                                  'Теперь каждое утро Вы будете получать информацию о праздниках,'
-                                                  ' погоде, и гороскопе, так же, будут отображаться события чата.\n'
-                                                  'Добавить события можно написав "Ева, события"')
+                bot.send_message(message.chat.id, '<b>Готово!</b> Ваш чат успешно добавлен в список рассылок.\n'
+                                                  'Теперь каждое утро Вы будете получать информацию <b>о праздниках,'
+                                                  ' погоде, и гороскопе, так же, будут отображаться события чата</b>.\n'
+                                                  'Добавить события можно написав "Ева, события"\n'
+                                                  'По умолчанию погода отображается в Москве. Чтобы изменить город, \n'
+                                                  'напишите "<b>Сменить город</b>"', parse_mode='html')
             except Exception:
                 bot.send_message(message.chat.id, 'Ваш чат уже добавлен в список рассылок')
         elif result == 'Ева, удали чат' or result == 'Ева удали чат':
@@ -493,6 +495,24 @@ def main():
             deg = cursor.execute('SELECT * FROM chats_id').fetchall()
             bot.send_message(message.chat.id, 'События:\n'
                                               f'{np.array(deg)}')
+        elif result == 'Сменить город':
+            bot.send_message(message.chat.id, 'Введите <b>страну и город'
+                                              'на английском языке через /</b>\n'
+                                              'Пример:\n'
+                                              'Russia/Moscow\n'
+                                              'Для предотвращения ошибок воспользуйтесь переводчиком', parse_mode='html')
+            bot.register_next_step_handler(message, add_city_db)
+
+    def add_city_db(message):
+        add_city = str(message.text).lower().replace(' ', '')
+        finish_city = add_city.replace('/', '_')
+        try:
+            cursor.execute(f'UPDATE chats_id SET city="{finish_city}" WHERE chat_id={message.chat.id}')
+            conn.commit()
+            bot.send_message(message.chat.id, f'Город успешно изменен! Погода будет '
+                                              f'отображаться в <b>{add_city}</b>', parse_mode='html')
+        except Exception:
+            bot.send_message(message.chat.id, 'Что-то пошло не так. Проверьте правильность ввода')
 
     def delete_event(message):
         try:
