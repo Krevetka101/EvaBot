@@ -193,13 +193,13 @@ for messages in total_results:
         bot.send_message(messages[0], f'<b>Доброе утро!</b>{result_morning_cartoon}\n'
                                       f'<b>Сегодня:</b> {today_date}\n'
                                       f'<b>Сегодняшние праздники:</b>🎂\n'
-                                      f'{result_holidays}\n')
+                                      f'{result_holidays}\n', parse_mode='html')
     else:
         bot.send_message(messages[0], f'<b>Доброе утро!</b>{result_morning_cartoon}\n'
                                       f'<b>Сегодня:</b> {today_date}\n'
                                       f'<b>Сегодняшние праздники:</b>🎂\n'
                                       f'{result_holidays}'
-                                      f'\n{temp2.text}\n')
+                                      f'\n{temp2.text}\n', parse_mode='html')
     try:
         bot.send_message(messages[0], f'<b>Погода на сегодня в {check_awg}:</b>🌅\n{hggg}\n'
                                       f'Чтобы изменить страну/город напишите "Сменить город"', parse_mode='html')
