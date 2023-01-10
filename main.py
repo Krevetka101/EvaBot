@@ -36,6 +36,9 @@ def main():
                                           'написать <b>Ева (1 вариант) или (2 вариант)</b>\n'
                                           '🗂Для управления событиями, напишите "<b>Ева, события</b>"\n'
                                           '📝Чтобы подключить ежедневные рассылки, напишите "<b>Ева, добавь чат</b>"\n'
+                                          'Чтобы выбрать знаки зодиака для гороскопа,'
+                                          ' напишите <b>Выбрать знаки</b>\n'
+                                          '🏘Чтобы выбрать город для отображения погоды, напишите <b>Сменить город</b>\n'
                                           '📱Встроенный модуль расчета периметра/площади/объема. '
                                           'Для его активации напишите "<b>Ева, математика</b>"\n'
                                           '📨<b>Мой канал, где можно связаться с разработчиком, и узнать '
@@ -48,7 +51,8 @@ def main():
                                           "У меня есть свой канал, где Вы можете задать вопросы по работе,"
                                           "предложить идею для расширения функционала, и внести "
                                           "пожертвования @EvaBotSupport 🌷\n"
-                                          "Возможны временные сбои в моей работе, но я пока только учусь.", parse_mode='html')
+                                          "Возможны временные сбои в моей работе, но я пока только учусь.",
+                         parse_mode='html')
         bot.send_message(message.chat.id,
                          'Чтобы подключить ежедневные рассылки, напишите "<b>Ева, добавь чат</b>"📝\n\n'
                          'Туда входят:\n'
@@ -91,6 +95,33 @@ def main():
         but3 = types.InlineKeyboardButton('Удалить событие', callback_data='delete_event')
         kb.add(but3)
         bot.send_message(message.chat.id, 'Выберите действие:', reply_markup=kb)
+
+    list_goro = []
+
+    def choise_goro(message):
+        show_goro = cursor.execute(f'SELECT goro FROM chats_id WHERE chat_id={message.chat.id}').fetchall()
+        result_goro = np.array(show_goro)
+        kb = types.InlineKeyboardMarkup()
+        but1 = types.InlineKeyboardButton('Овен', callback_data='oven')
+        but2 = types.InlineKeyboardButton('Телец', callback_data='telec')
+        but3 = types.InlineKeyboardButton('Близнецы', callback_data='blizn')
+        kb.add(but1, but2, but3)
+        but4 = types.InlineKeyboardButton('Рак', callback_data='rak')
+        but5 = types.InlineKeyboardButton('Лев', callback_data='lev')
+        but6 = types.InlineKeyboardButton('Дева', callback_data='deva')
+        kb.add(but4, but5, but6)
+        but7 = types.InlineKeyboardButton('Весы', callback_data='vesi')
+        but8 = types.InlineKeyboardButton('Скорпион', callback_data='scorpion')
+        but9 = types.InlineKeyboardButton('Стрелец', callback_data='strelec')
+        kb.add(but7, but8, but9)
+        but10 = types.InlineKeyboardButton('Козерог', callback_data='kozerog')
+        but11 = types.InlineKeyboardButton('Водолей', callback_data='vodoley')
+        but12 = types.InlineKeyboardButton('Рыбы', callback_data='ribi')
+        kb.add(but10, but11, but12)
+        but13 = types.InlineKeyboardButton('Подтвердить', callback_data='accept')
+        kb.add(but13)
+        bot.send_message(message.chat.id, 'Выберите знаки для гороскопа:\n'
+                                          f'Выбранные знаки: <b>{result_goro}</b>', reply_markup=kb, parse_mode='html')
 
     @bot.callback_query_handler(func=lambda call: True)
     def callback_query(call):
@@ -253,6 +284,98 @@ def main():
                                   text='Введите три ребра <b>параллелепипеда</b> в '
                                        '<b>сантиметрах</b> выходящих из одной вершины:', parse_mode='html')
             bot.register_next_step_handler(call.message, obj_parall)
+        elif call.data == 'oven':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Овен удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Овен добавлен в список ✅')
+        elif call.data == 'telec':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Телец удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Телец добавлен в список ✅')
+        elif call.data == 'blizn':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Близнецы удалены из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Близнецы добавлены в список ✅')
+        elif call.data == 'rak':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Рак удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Рак добавлен в список ✅')
+        elif call.data == 'lev':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Лев удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Лев добавлен в список ✅')
+        elif call.data == 'deva':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Дева удалена из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Дева добавлена в список ✅')
+        elif call.data == 'vesi':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Весы удалены из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Весы добавлены в список ✅')
+        elif call.data == 'scorpion':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Скорпион удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Скорпион добавлен в список ✅')
+        elif call.data == 'strelec':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Стрелец удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Стрелец добавлен в список ✅')
+        elif call.data == 'kozerog':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Козерог удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Козерог добавлен в список ✅')
+        elif call.data == 'vodoley':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Водолей удален из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Водолей добавлен в список ✅')
+        elif call.data == 'ribi':
+            if call.data in list_goro:
+                list_goro.remove(call.data)
+                bot.send_message(call.message.chat.id, 'Рыбы удалены из списка ❌')
+            else:
+                list_goro.append(call.data)
+                bot.send_message(call.message.chat.id, 'Рыбы добавлены в список ✅')
+        elif call.data == 'accept':
+            push_goro = ''
+            for push in list_goro:
+                push_goro += push + ','
+            cursor.execute(f'UPDATE chats_id SET goro="{push_goro}" WHERE chat_id={call.message.chat.id}')
+            conn.commit()
+            bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
+            bot.send_message(call.message.chat.id, 'Изменения успешно сохранены!')
 
     def perim_sq(message):
         pre_num = str(message.text).replace(' ', '')
@@ -463,7 +586,9 @@ def main():
                                                   ' погоде, и гороскопе, так же, будут отображаться события чата</b>.\n'
                                                   'Добавить события можно написав "Ева, события"\n'
                                                   'По умолчанию погода отображается в Москве. Чтобы изменить город, \n'
-                                                  'напишите "<b>Сменить город</b>"', parse_mode='html')
+                                                  'напишите "<b>Сменить город</b>"\n'
+                                                  'Чтобы настроить знаки зодиака для гороскопа напишите '
+                                                  '<b>Выбрать знаки</b>', parse_mode='html')
             except Exception:
                 bot.send_message(message.chat.id, 'Ваш чат уже добавлен в список рассылок')
         elif result == 'Ева, удали чат' or result == 'Ева удали чат':
@@ -496,12 +621,15 @@ def main():
             bot.send_message(message.chat.id, 'События:\n'
                                               f'{np.array(deg)}')
         elif result == 'Сменить город':
-            bot.send_message(message.chat.id, 'Введите <b>страну и город'
+            bot.send_message(message.chat.id, 'Введите <b>страну и город '
                                               'на английском языке через /</b>\n'
                                               'Пример:\n'
                                               'Russia/Moscow\n'
-                                              'Для предотвращения ошибок воспользуйтесь переводчиком', parse_mode='html')
+                                              'Для предотвращения ошибок воспользуйтесь переводчиком',
+                             parse_mode='html')
             bot.register_next_step_handler(message, add_city_db)
+        elif result == 'Выбрать знаки' or result == 'выбрать знаки':
+            choise_goro(message)
 
     def add_city_db(message):
         add_city = str(message.text).lower().replace(' ', '')
