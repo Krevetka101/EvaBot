@@ -374,6 +374,7 @@ def main():
                 push_goro += push + ','
             cursor.execute(f'UPDATE chats_id SET goro="{push_goro}" WHERE chat_id={call.message.chat.id}')
             conn.commit()
+            list_goro.clear()
             bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
             bot.send_message(call.message.chat.id, 'Изменения успешно сохранены!')
 
