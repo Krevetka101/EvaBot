@@ -5,7 +5,7 @@ import telebot, wikipedia, datetime, sqlite3, requests, random
 import numpy as np
 from bs4 import BeautifulSoup
 
-bot = telebot.TeleBot('5740263278:AAFTyI5d5q5DyT5SwiH6yfGOQHKeazR26EU')
+bot = telebot.TeleBot('TOKEN')
 namebot = 'Ева'
 wikipedia.set_lang('ru')
 today_date = datetime.date.today()
