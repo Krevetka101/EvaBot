@@ -5,7 +5,7 @@ import numpy as np
 
 
 def main():
-    bot = telebot.TeleBot('5740263278:AAFTyI5d5q5DyT5SwiH6yfGOQHKeazR26EU')
+    bot = telebot.TeleBot('TOKEN')
     namebot = 'Ева'
     wikipedia.set_lang('ru')
     date_and_time = datetime.datetime.now().strftime('%H.%M.%S : %d-%m-%Y')
@@ -614,13 +614,6 @@ def main():
             bot.send_message(message.chat.id, 'Спасибо, мне очень приятно :)')
         elif result == 'Ева математика' or result == 'Ева, математика':
             mathem(message)
-        elif result == 'Ева, стата' and message.chat.id == 2078991528:
-            abc = cursor.execute('SELECT * FROM evabase').fetchall()
-            bot.send_message(message.chat.id, 'БД:\n'
-                                              f'{np.array(abc)}')
-            deg = cursor.execute('SELECT * FROM chats_id').fetchall()
-            bot.send_message(message.chat.id, 'События:\n'
-                                              f'{np.array(deg)}')
         elif result == 'Сменить город':
             bot.send_message(message.chat.id, 'Введите <b>страну и город '
                                               'на английском языке через /</b>\n'
